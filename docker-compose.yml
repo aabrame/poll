@@ -24,7 +24,7 @@ services:
       POSTGRES_DB: poll
     networks:  
       - poll-backend-net
-    volumes:
+    # volumes:
       # - poll-backend-db-vol:/var/lib/mysql
       # - "./script.sql:/docker-entrypoint-initdb.d/1.sql"
 
