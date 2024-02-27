@@ -1,0 +1,35 @@
+version: "3.7"
+services:
+
+  poll-backend:
+    build: ./poll-backend
+    environment: 
+      spring.datasource.username: root
+      spring.datasource.password: root
+      spring.datasource.url: jdbc:postgresql://poll-backend-db:5432/poll
+      frontend.url: http://localhost:4200
+    ports:
+      - 8080:8080
+    networks: 
+      - poll-backend-net
+    restart: on-failure
+    depends_on:
+      - poll-backend-db
+
+  poll-backend-db:
+    image: postgres
+    environment: 
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: poll
+    networks:  
+      - poll-backend-net
+    volumes:
+      # - poll-backend-db-vol:/var/lib/mysql
+      - "./script.sql:/docker-entrypoint-initdb.d/1.sql"
+
+networks:
+  poll-backend-net:
+
+volumes:
+  poll-backend-db-vol:
