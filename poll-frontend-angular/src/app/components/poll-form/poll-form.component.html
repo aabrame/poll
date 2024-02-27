@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>{{data.title}}</h2>
+<mat-dialog-content>
+  <form [formGroup]="pollFormGroup">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Poll name</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+
+    <div class="options" formArrayName="options">
+        <div class="option" *ngFor="let ofg of optionsFormArray.controls; let i=index">
+          <mat-form-field [formGroupName]="i" appearance="outline">
+            <mat-icon matPrefix>horizontal_rule</mat-icon>
+            <mat-label>Option name</mat-label>
+            <input matInput formControlName="name">
+            <button mat-icon-button matSuffix color="warn" (click)="onRemoveOption(i)" >
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+        <button mat-raised-button color="primary" (click)="onAddOption()">Add an option</button>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-raised-button mat-dialog-close type="button">Cancel</button>
+  <button mat-button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+</mat-dialog-actions>
+

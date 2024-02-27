@@ -1,0 +1,39 @@
+<mat-toolbar color="primary">
+  <span>Polls</span>
+</mat-toolbar>
+
+<mat-accordion *ngIf="polls$ | async as polls; else loading">
+  <div class="header">
+    <mat-form-field appearance="outline">
+      <mat-label>Filter</mat-label>
+      <input matInput>
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="onAdd()">New poll</button>
+  </div>
+  <mat-expansion-panel *ngFor="let poll of polls" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{poll.id}} - {{poll.name}}
+      </mat-panel-title>
+      <mat-panel-description>
+        <button mat-icon-button color="primary" (click)="onEdit($event, poll)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" (click)="onDelete($event, poll)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-radio-group
+      aria-labelledby="example-radio-group-label"
+      class="example-radio-group">
+      <mat-radio-button *ngFor="let o of poll.options" class="example-radio-button" [value]="o">{{o.name}} ({{percentage(poll, o)}})</mat-radio-button>
+    </mat-radio-group>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<ng-template #loading>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</ng-template>
