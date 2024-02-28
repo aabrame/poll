@@ -13,12 +13,12 @@ public class PollService {
     
     private final PollRepository pollRepository;
 
-	@PreAuthorize("new Integer(principal.claims['sub']) == #poll.creator.id")
+	@PreAuthorize("isAuthenticated() && new Integer(principal.claims['sub']) == #poll.creator.id")
 	public Poll update(Poll newPoll, @P("poll") Poll oldPoll) {
 		return pollRepository.save(newPoll);
 	}
 
-	@PreAuthorize("new Integer(principal.claims['sub']) == #poll.creator.id")
+	@PreAuthorize("isAuthenticated() && new Integer(principal.claims['sub']) == #poll.creator.id")
 	public void delete(@P("poll") Poll poll) {
 		pollRepository.delete(poll);
 	}
