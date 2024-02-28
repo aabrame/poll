@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +20,7 @@ import fr.formation.pollbackend.exceptions.NotFoundException;
 import fr.formation.pollbackend.models.Poll;
 import fr.formation.pollbackend.repositories.PollRepository;
 import fr.formation.pollbackend.repositories.UserRepository;
+import fr.formation.pollbackend.services.PollService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -30,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class PollController {
     
     private final PollRepository pollRepository;
+	private final PollService pollService;
     private final UserRepository userRepository;
 
     @GetMapping
@@ -54,31 +55,22 @@ public class PollController {
 		return pollRepository.save(m);
 	}
 	
-	@PreAuthorize("principal== #poll.creator.id")
 	@PutMapping("{id:\\d+}")
-	public Poll update(@PathVariable long id, @Valid @RequestBody @P("poll") Poll poll) {
+	public Poll update(@PathVariable long id, @Valid @RequestBody Poll poll) {
 		if (poll.getId() != id)
 			throw new BadRequestException("ids in url and body do no match");
 		if (poll.getId() == 0)
 			throw new BadRequestException("id must not be zero");
-        if (pollRepository.findById(poll.getId()).isEmpty())
-			throw new NotFoundException("no entity with id " + poll.getId() + " exists");
-		return pollRepository.save(poll);
+        var old = pollRepository.findById(poll.getId()).orElseThrow(
+			() -> { throw new NotFoundException("no entity with id " + poll.getId() + " exists"); });
+		return pollService.update(poll, old);
 	}
 	
-	// @PreAuthorize("principal == #m.creator.id")
-	// @PreAuthorize("@userRepository.findById(#id).get().creator == principal.getUser()")
 	@DeleteMapping("{id:\\d+}")
-	public void deleteById(@PathVariable long id) {
+	public void deleteById(@PathVariable long id, Principal principal, Authentication authentication) {
 		
 		pollRepository.findById(id).ifPresentOrElse(
-				this::delete, 
-				() -> { throw new NotFoundException("no entity with id " + id + " exists"); }
-		);
-	}
-
-	@PreAuthorize("principal == #poll.creator.id")
-	private void delete(@P("poll") Poll poll) {
-		pollRepository.delete(poll);
+				pollService::delete, 
+				() -> { throw new NotFoundException("no entity with id " + id + " exists"); });
 	}
 }
