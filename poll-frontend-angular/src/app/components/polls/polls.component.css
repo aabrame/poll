@@ -1,0 +1,33 @@
+mat-accordion {
+  display: block;
+  max-width: 1024px;
+  margin: 15px auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+
+  mat-form-field {
+    width: 65%;
+  }
+}
+
+.mat-expansion-panel-header-description {
+  justify-content: end;
+}
+
+.example-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+  align-items: flex-start;
+}
+
+.example-radio-button {
+  margin: 5px;
+}
+.spacer {
+  flex-grow: 1;
+}

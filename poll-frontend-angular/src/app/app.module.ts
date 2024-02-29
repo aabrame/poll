@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -16,9 +16,13 @@ import {MatInputModule} from '@angular/material/input';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatListModule} from '@angular/material/list';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { PollFormComponent } from './components/poll-form/poll-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoginComponent } from './components/login/login.component';
+import { PollsComponent } from './components/polls/polls.component';
+import { AuthenticationService } from './services/authentication.service';
+import { authenticationInterceptor } from './interceptors/authentication.interceptor';
 
 const materialImports = [
   MatToolbarModule,
@@ -36,17 +40,28 @@ const materialImports = [
 @NgModule({
   declarations: [
     AppComponent,
-    PollFormComponent
+    PollFormComponent,
+    LoginComponent,
+    PollsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,
+    // HttpClientModule,
     ReactiveFormsModule,
     ...materialImports
   ],
   providers: [
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    provideHttpClient(
+      withInterceptors([authenticationInterceptor])
+    ),
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (as: AuthenticationService) => () => as.init(),
+      deps: [AuthenticationService],
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
