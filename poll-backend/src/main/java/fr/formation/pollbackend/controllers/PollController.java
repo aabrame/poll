@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.formation.pollbackend.exceptions.BadRequestException;
@@ -34,8 +35,10 @@ public class PollController {
     private final UserRepository userRepository;
 
     @GetMapping
-	public Collection<Poll> findAll() {
-		return pollRepository.findAll();
+	public Collection<Poll> findAll(@RequestParam(required = false) String q) {
+		return q == null 
+			? pollRepository.findAll()
+			: pollRepository.findByNameContaining(q);
 	}
 
 	@GetMapping("{id:\\d+}")
