@@ -36,7 +36,7 @@ public class PollController {
 
     @GetMapping
 	public Collection<Poll> findAll(@RequestParam(required = false) String q) {
-		return q == null 
+		return q == null || q.isBlank()
 			? pollRepository.findAll()
 			: pollRepository.findByNameContaining(q);
 	}

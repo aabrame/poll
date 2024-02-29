@@ -1,20 +1,20 @@
 import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, debounceTime, distinctUntilChanged, mergeMap, startWith } from 'rxjs';
+import { Observable, startWith, debounceTime, distinctUntilChanged, mergeMap } from 'rxjs';
 import { Poll } from '../../models/poll.model';
 import { PollService } from '../../services/poll.service';
 import { PollFormComponent } from '../poll-form/poll-form.component';
 import { Option } from '../../models/option.model';
-import { FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-polls',
-  templateUrl: './polls.component.html',
-  styleUrl: './polls.component.css'
+  selector: 'app-polls2',
+  templateUrl: './polls2.component.html',
+  styleUrl: './polls2.component.css'
 })
-export class PollsComponent {
+export class Polls2Component {
 
-  polls$: Observable<Poll[]>;
+  polls?: Poll[];
 
   filter = new FormControl('', { nonNullable: true });
 
@@ -22,12 +22,16 @@ export class PollsComponent {
     private pollService: PollService,
     private dialogService: MatDialog
   ) {
-    this.polls$ = this.filter.valueChanges.pipe(
+    this.filter.valueChanges.pipe(
       startWith(''),
       debounceTime(333),
       distinctUntilChanged(),
       mergeMap(q => this.pollService.findAll(q))
-    )
+    ).subscribe(polls => this.polls = polls)
+  }
+
+  onFilter() {
+    this.pollService.findAll(this.filter.value).subscribe(polls => this.polls = polls);
   }
 
   onAdd() {
@@ -43,9 +47,6 @@ export class PollsComponent {
       }
     ).afterClosed().subscribe(
       p => {
-        console.log(p);
-        if (p)
-          this.polls$ = this.pollService.findAll();
       });
   }
 
@@ -64,8 +65,6 @@ export class PollsComponent {
       }
     ).afterClosed().subscribe(
       p => {
-        if (p)
-          this.polls$ = this.pollService.findAll();
       });
   }
 

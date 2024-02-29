@@ -14,8 +14,8 @@ export class PollService {
 
   constructor(private httpClient: HttpClient) { }
 
-  findAll(): Observable<Poll[]> {
-    return this.httpClient.get<Poll[]>(this.url).pipe(delay(1000));
+  findAll(q?: string): Observable<Poll[]> {
+    return this.httpClient.get<Poll[]>(this.url, q ? { params: { q: q} } : undefined).pipe(delay(1000));
   }
 
   findById(id: number): Observable<Poll> {

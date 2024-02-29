@@ -23,6 +23,7 @@ import { LoginComponent } from './components/login/login.component';
 import { PollsComponent } from './components/polls/polls.component';
 import { AuthenticationService } from './services/authentication.service';
 import { authenticationInterceptor } from './interceptors/authentication.interceptor';
+import { Polls2Component } from './components/polls2/polls2.component';
 
 const materialImports = [
   MatToolbarModule,
@@ -42,7 +43,8 @@ const materialImports = [
     AppComponent,
     PollFormComponent,
     LoginComponent,
-    PollsComponent
+    PollsComponent,
+    Polls2Component
   ],
   imports: [
     BrowserModule,

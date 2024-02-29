@@ -62,4 +62,22 @@ export class AuthenticationService {
     this.connectedUser.next(undefined);
   }
 
+  refresh() {
+    return this.httpClient.post<JwtResponse>(this.url, {
+      refreshToken: this.connectedUser.value?.refreshToken,
+      grantType: 'refreshToken'
+    }).pipe(
+      tap(res => {
+        const decodedAccessToken = jwtDecode<JwtCustomPayload>(res.accessToken);
+        const user = {
+          accessToken: res.accessToken,
+          refreshToken: res.refreshToken,
+          id: Number(decodedAccessToken.sub),
+          name: decodedAccessToken.username
+        };
+        this.connectedUser.next(user);
+        localStorage.setItem('user', JSON.stringify(user));
+      }));
+  }
+
 }

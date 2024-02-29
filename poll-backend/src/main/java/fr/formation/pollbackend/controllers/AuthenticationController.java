@@ -88,7 +88,7 @@ public class AuthenticationController {
         JwtClaimsSet jwtClaimsSet = JwtClaimsSet.builder()
                 .issuedAt(Instant.now())
                 .issuer("annuaire-backend")
-                .expiresAt(Instant.now().plusSeconds(60 * 60))
+                .expiresAt(Instant.now().plusSeconds(1 * 60))
                 .subject(String.valueOf(user.getId()))
                 .claim("username", user.getName())
                 .build();

@@ -1,11 +1,12 @@
 
-<mat-accordion *ngIf="polls$ | async as polls; else loading">
+<mat-accordion *ngIf="polls; else loading">
   <div class="header">
     <mat-form-field appearance="outline">
       <mat-label>Filter</mat-label>
       <input matInput [formControl]="filter">
       <mat-icon matPrefix>search</mat-icon>
     </mat-form-field>
+    <button mat-raised-button color="primary" (click)="onFilter()">Filter</button>
     <button mat-raised-button color="primary" (click)="onAdd()">New poll</button>
   </div>
   <mat-expansion-panel *ngFor="let poll of polls" hideToggle>
