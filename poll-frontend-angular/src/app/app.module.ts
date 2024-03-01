@@ -24,6 +24,12 @@ import { PollsComponent } from './components/polls/polls.component';
 import { AuthenticationService } from './services/authentication.service';
 import { authenticationInterceptor } from './interceptors/authentication.interceptor';
 import { Polls2Component } from './components/polls2/polls2.component';
+import { RunAwayDirective } from './directives/run-away.directive';
+import { IsAnonymousDirective } from './directives/is-anonymous.directive';
+import { IsCreatorOfDirective } from './directives/is-creator-of.directive';
+import { InsertErrorsDirective } from './directives/insert-errors.directive';
+import { SignUpComponent } from './components/sign-up/sign-up.component';
+import { InsertError2Directive } from './directives/insert-error2.directive';
 
 const materialImports = [
   MatToolbarModule,
@@ -44,7 +50,13 @@ const materialImports = [
     PollFormComponent,
     LoginComponent,
     PollsComponent,
-    Polls2Component
+    Polls2Component,
+    RunAwayDirective,
+    IsAnonymousDirective,
+    IsCreatorOfDirective,
+    InsertErrorsDirective,
+    SignUpComponent,
+    InsertError2Directive
   ],
   imports: [
     BrowserModule,

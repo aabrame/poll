@@ -16,10 +16,10 @@
       <mat-panel-description>
         <div>by {{poll.creator.name}}</div>
         <div class="spacer"></div>
-        <button mat-icon-button color="primary" (click)="onEdit($event, poll)">
+        <button mat-icon-button color="primary" (click)="onEdit($event, poll)" *appIsCreatorOf="poll">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button color="primary" (click)="onDelete($event, poll)">
+        <button mat-icon-button color="primary" (click)="onDelete($event, poll)" *appIsCreatorOf="poll">
           <mat-icon>delete</mat-icon>
         </button>
       </mat-panel-description>

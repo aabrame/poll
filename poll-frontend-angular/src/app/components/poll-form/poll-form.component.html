@@ -6,6 +6,7 @@
       <mat-label>Poll name</mat-label>
       <input matInput formControlName="name">
     </mat-form-field>
+      <div *appInsertErrors="pollFormGroup.controls.name">error</div>
 
     <div class="options" formArrayName="options">
         <div class="option" *ngFor="let ofg of optionsFormArray.controls; let i=index">
