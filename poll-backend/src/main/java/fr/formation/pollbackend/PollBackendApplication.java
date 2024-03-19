@@ -21,7 +21,7 @@ public class PollBackendApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "UPDATE", "DELETE", "OPTIONS")
-						.allowedOrigins("http://localhost:4200");
+						.allowedOrigins("http://localhost:4200", "http://localhost:3000");
 			}
 		};
 	}
