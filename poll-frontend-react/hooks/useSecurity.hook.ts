@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 
@@ -18,11 +18,14 @@ export interface ConnectedUser {
     username: string
   }
 
-export  interface SecurityData {
+export interface SecurityData {
     connectedUser: ConnectedUser | undefined,
     login: (email: string, password: string) => Promise<void>,
-    logout: () => void
+    logout: () => void,
+    refresh: () => Promise<string>,
   }
+
+
 
 export default function useSecurity() : SecurityData {
     const [connectedUser, setConnectedUser] = useState<ConnectedUser | undefined>(undefined);
@@ -33,22 +36,36 @@ export default function useSecurity() : SecurityData {
             setConnectedUser(JSON.parse(json));
     }, [])
 
+    function onAuthenticationResponse(res: AxiosResponse<JwtResponse>) {
+        const decodedAccessToken = jwtDecode<JwtCustomPayload>(res.data.accessToken);
+        const user = {
+            accessToken: res.data.accessToken,
+            refreshToken: res.data.refreshToken,
+            id: Number(decodedAccessToken.sub),
+            name: decodedAccessToken.username
+        };
+        setConnectedUser(user);
+        localStorage.setItem('user', JSON.stringify(user));
+    }
+
     const login = async (email: string, password: string) => {
-        return axios.post(process.env.NEXT_PUBLIC_BACK_URL + "authenticate", {
+        return axios.post<JwtResponse>(process.env.NEXT_PUBLIC_BACK_URL + "authenticate", {
             username: email,
             password: password,
             grantType: 'password'
           })
-          .then(res => {
-            const decodedAccessToken = jwtDecode<JwtCustomPayload>(res.data.accessToken);
-            const user = {
-              accessToken: res.data.accessToken,
-              refreshToken: res.data.refreshToken,
-              id: Number(decodedAccessToken.sub),
-              name: decodedAccessToken.username
-            };
-            setConnectedUser(user);
-            localStorage.setItem('user', JSON.stringify(user));
+          .then(onAuthenticationResponse);
+    }
+
+    const refresh = async () => {
+        return axios.post<JwtResponse>(process.env.NEXT_PUBLIC_BACK_URL + "authenticate", {
+            refreshToken: connectedUser?.refreshToken,
+            grantType: 'refreshToken'
+        })
+        .then(res => {
+            onAuthenticationResponse(res);
+            console.log("refresh: " + res.data.accessToken);
+            return res.data.accessToken;
         });
     }
     
@@ -57,5 +74,5 @@ export default function useSecurity() : SecurityData {
         localStorage.removeItem('user');
     }
     
-    return { connectedUser: connectedUser, login: login, logout: logout };
+    return { connectedUser: connectedUser, login: login, logout: logout, refresh: refresh };
 }

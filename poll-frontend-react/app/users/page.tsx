@@ -1,12 +1,9 @@
 'use client'
 import { User } from "@/models/user.model";
-import { Avatar, Button, IconButton, LinearProgress, List, ListItem, ListItemAvatar, ListItemText, Paper } from "@mui/material";
+import { Avatar, Button, IconButton, LinearProgress, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Paper } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import PersonIcon from '@mui/icons-material/Person';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import Link from "next/link";
 import ActionButton from "@/components/actionButton";
 import { setTimeout } from "timers";
@@ -30,31 +27,27 @@ export default function UserList() {
           <Link href="/users/add">Add</Link>
           <List>
             {users.map(u => (
-              <ListItem key={u.id} 
-              secondaryAction={
-                <>
-                  <Button>
-                    <Link href={"/users/" + u.id}>
-                      Details
-                    </Link>
-                  </Button>
-                  {/* <IconButton edge="end" aria-label="details">
-                    <Link href={"/users/" + u.id}>
-                      <ReadMoreIcon />
-                    </Link>
-                  </IconButton>
-                  <IconButton edge="end" aria-label="edit">
-                    <EditIcon />
-                  </IconButton> */}
-                  <ActionButton aria-label="delete" action={() => handleDelete(u.id)}>
-                    <DeleteIcon />
-                  </ActionButton>
-                  </>
-              }>
+              <ListItem key={u.id}>
                 <ListItemAvatar>
                   <Avatar> <PersonIcon /> </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={u.name} secondary={u.email} />
+                <ListItemSecondaryAction sx={{ display: "flex", alignItems: "center"}}>
+                  <Link href={"/users/" + u.id} passHref>
+                    <Button variant="contained">
+                      Details
+                    </Button>
+                  </Link>
+                  <Link href={"/users/" + u.id + "/edit"} passHref>
+                    <Button variant="contained">
+                      Edit
+                    </Button>
+                  </Link>
+                  <ActionButton aria-label="delete" action={() => handleDelete(u.id)}>
+                    Delete
+                  </ActionButton>
+
+                </ListItemSecondaryAction>
               </ListItem>
             ))}
           </List>
