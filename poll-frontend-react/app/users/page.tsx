@@ -38,7 +38,7 @@ export default function UserList() {
                       Details
                     </Button>
                   </Link>
-                  <Link href={"/users/" + u.id + "/edit"} passHref>
+                  <Link href={"/users/" + u.id + "/edit"} passHref style={{marginLeft: '10px'}}>
                     <Button variant="contained">
                       Edit
                     </Button>
