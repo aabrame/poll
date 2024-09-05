@@ -1,9 +1,11 @@
-package fr.formation.poll_backend_spring.models;
+package fr.formation.poll_backend_webservice_springboot.models;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import org.hibernate.validator.constraints.Length;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,7 +28,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 @Entity
-public class User {
+public class User implements HasId {
 	
 	@EqualsAndHashCode.Include
 	@Id
@@ -46,6 +48,7 @@ public class User {
 	@ToString.Exclude
 	@Builder.Default
 	@OneToMany(mappedBy = "creator")
+	@JsonIgnore
 	private Set<Poll> polls = new HashSet<>();
 
 }

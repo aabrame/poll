@@ -1,26 +1,22 @@
 package fr.formation.poll_backend_webapp_spring;
 
-import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRegistration;
+public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-public class WebAppInitializer implements WebApplicationInitializer {
-    
-	@Override
-	public void onStartup(ServletContext servletContext) throws ServletException {
-		
-		AnnotationConfigWebApplicationContext dispatcherContext = new AnnotationConfigWebApplicationContext();
-		dispatcherContext.register(WebAppConfig.class);
-		servletContext.addListener(new ContextLoaderListener(dispatcherContext));
+    @Override
+    protected Class<?>[] getRootConfigClasses() {
+        return null;
+    }
 
-		ServletRegistration.Dynamic appServlet = servletContext.addServlet("webapp", new DispatcherServlet(dispatcherContext));
-		appServlet.setLoadOnStartup(1);
-		appServlet.addMapping("/");
-	}
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return new Class[] { WebAppConfig.class };
+    }
+
+    @Override
+    protected String[] getServletMappings() {
+        return new String[] { "/" };
+    }
 
 }

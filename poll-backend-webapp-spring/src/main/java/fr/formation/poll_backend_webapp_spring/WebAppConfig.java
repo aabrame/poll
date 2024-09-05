@@ -11,11 +11,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import fr.formation.poll_backend_spring.App;
+import fr.formation.poll_backend_webapp_spring.security.SecurityConfig;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan
-@Import(App.class)
+@Import({App.class, SecurityConfig.class})
 public class WebAppConfig implements WebMvcConfigurer {
 
 	@Bean
