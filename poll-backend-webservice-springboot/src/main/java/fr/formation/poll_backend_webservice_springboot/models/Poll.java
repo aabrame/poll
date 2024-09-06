@@ -23,7 +23,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 @Entity
-public class Poll implements HasId {
+public class Poll {
 	
 	@EqualsAndHashCode.Include
 	@Id
