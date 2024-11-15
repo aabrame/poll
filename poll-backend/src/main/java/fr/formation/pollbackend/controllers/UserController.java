@@ -3,6 +3,7 @@ package fr.formation.pollbackend.controllers;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,6 +53,7 @@ public class UserController {
         userRepository.save(user);
     }
 
+	@PreAuthorize("isAuthenticated()")
     @DeleteMapping("{id}")
     void deleteBy(@PathVariable long id) {
         userRepository.findById(id).ifPresentOrElse(
