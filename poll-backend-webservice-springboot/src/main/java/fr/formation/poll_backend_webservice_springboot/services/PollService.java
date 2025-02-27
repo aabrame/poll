@@ -1,9 +1,7 @@
 package fr.formation.poll_backend_webservice_springboot.services;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
 import fr.formation.poll_backend_webservice_springboot.dto.PollDto;
 import fr.formation.poll_backend_webservice_springboot.exceptions.NotFoundException;
 import fr.formation.poll_backend_webservice_springboot.mappers.customs.PollMapper;
@@ -23,11 +21,18 @@ public class PollService extends GenericService<Poll, PollDto, PollRepository, P
     }
 
     @Override
+    public PollDto save(PollDto dto) {
+        final var id = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
+        dto.setCreatorId(id);
+        return super.save(dto);
+    }
+
+    @Override
     @Transactional
     public void update(PollDto dto) {
         super.update(dto);
         final var oldPoll = repository.findById(dto.getId())
-            .orElseThrow(() -> new NotFoundException());
+            .orElseThrow(NotFoundException::new);
         oldPoll.getOptions().stream()
             .filter(option -> dto.getOptions().stream().noneMatch(other -> option.getId() == other.getId()))
             .forEach(optionRepository::delete);

@@ -23,5 +23,5 @@ export default function PollDetails({ params }: { params: {id: number}}) {
         </Link>
       </Button>
     </Paper>
-);
+  );
 }

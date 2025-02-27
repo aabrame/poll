@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -16,8 +17,17 @@ import fr.formation.poll_backend_webservice_springboot.repositories.UserReposito
 @Service
 public class UserService extends GenericService<User, UserDto, UserRepository, UserMapper> {
 
-    public UserService(UserRepository repository, UserMapper mapper) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository repository, UserMapper mapper, PasswordEncoder passwordEncoder) {
         super(repository, mapper);
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public UserDto save(UserDto dto) {
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+        return super.save(dto);
     }
 
     public void patch(long id, Map<String, Object> values) {

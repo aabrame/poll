@@ -14,11 +14,11 @@ public class PollBackendWebserviceSpringbootApplication {
 		SpringApplication.run(PollBackendWebserviceSpringbootApplication.class, args);
 	}
 
-	@Bean
-	public CommandLineRunner cli(UserRepository userRepository) {
-		return args -> {
-			userRepository.findAll().forEach(System.out::println);
-		};
-	}
+	// @Bean
+	// public CommandLineRunner cli(UserRepository userRepository) {
+	// 	return args -> {
+	// 		userRepository.findAll().forEach(System.out::println);
+	// 	};
+	// }
 
 }
