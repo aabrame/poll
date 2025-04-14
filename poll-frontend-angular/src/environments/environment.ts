@@ -1,3 +1,3 @@
 export const environment = {
-  backendUrl: 'http://vps-3f8dfeab.vps.ovh.net:8080/'
+  backendUrl: window[<any>'_env'][<any>'BACKEND_URL'] || 'http://vps-3f8dfeab.vps.ovh.net:8080/'
 };

@@ -1,0 +1,43 @@
+
+services:
+  
+  poll-backend:
+    build: ./poll-backend
+    environment:
+      spring.datasource.url: jdbc:postgresql://poll-backend-db:5432/poll
+      spring.datasource.username: root
+      spring.datasource.password: root
+      frontend.url: http://localhost
+    ports:
+      - "8080:8080"
+    networks:
+      - poll-backend-db
+    depends_on:
+      - poll-backend-db
+    restart: on-failure
+  
+  poll-backend-db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: poll
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    networks:
+      - poll-backend-db
+    volumes:
+      - poll-backend-db-vol:/var/lib/postgresql/data
+  
+  poll-frontend:
+    build: ./poll-frontend-angular
+    environment:
+      BACKEND_URL: http://localhost:8080/
+    ports:
+      - "80:80"
+    depends_on:
+      - poll-backend
+
+networks:
+  poll-backend-db:
+
+volumes:
+  poll-backend-db-vol:

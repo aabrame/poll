@@ -71,7 +71,6 @@ public class PollController {
 	
 	@DeleteMapping("{id:\\d+}")
 	public void deleteById(@PathVariable long id, Principal principal, Authentication authentication) {
-		
 		pollRepository.findById(id).ifPresentOrElse(
 				pollService::delete, 
 				() -> { throw new NotFoundException("no entity with id " + id + " exists"); });
